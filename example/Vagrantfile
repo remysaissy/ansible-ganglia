@@ -1,0 +1,51 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+UBUNTU_BOX_NAME = "trusty64"
+UBUNTU_BOX_URI = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
+UBUNTU_HOST = 'ubuntu'
+UBUNTU_IP = '192.168.10.10'
+
+CENTOS_BOX_NAME = "centos6564"
+CENTOS_BOX_URI = "https://github.com/2creatives/vagrant-centos/releases/download/v6.5.3/centos65-x86_64-20140116.box"
+CENTOS_HOST = 'centos'
+CENTOS_IP = '192.168.10.11'
+
+VBOX_VERSION = "4.3.14"
+VAGRANTFILE_API_VERSION = "2"
+DOMAIN = "ansible.local"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.landrush.enable
+  config.landrush.tld = DOMAIN
+
+  config.vm.define UBUNTU_HOST do |machine|
+    machine.vm.box = UBUNTU_BOX_NAME
+    machine.vm.box_url = UBUNTU_BOX_URI
+
+    machine.vm.hostname = "%s.%s" % [UBUNTU_HOST, config.landrush.tld]
+    machine.vm.network :private_network, ip: UBUNTU_IP
+
+    machine.vm.provider :virtualbox do |vb|
+      vb.name = machine.vm.hostname
+      vb.memory = 256
+      vb.cpus = 1
+      vb.customize ['modifyvm', :id, '--ioapic', 'on', '--cpuexecutioncap', '50']
+    end
+  end
+  
+  config.vm.define CENTOS_HOST do |machine|
+    machine.vm.box = CENTOS_BOX_NAME
+    machine.vm.box_url = CENTOS_BOX_URI
+
+    machine.vm.hostname = "%s.%s" % [CENTOS_HOST, config.landrush.tld]
+    machine.vm.network :private_network, ip: CENTOS_IP
+
+    machine.vm.provider :virtualbox do |vb|
+      vb.name = machine.vm.hostname
+      vb.memory = 256
+      vb.cpus = 1
+      vb.customize ['modifyvm', :id, '--ioapic', 'on', '--cpuexecutioncap', '50']
+    end
+  end
+end

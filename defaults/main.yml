@@ -1,0 +1,322 @@
+
+# Path component of the URL of the web interface.
+ganglia_web_location: /ganglia
+
+
+# These parameters has the default value
+ganglia_config_gmetad:
+
+# Mandatory parameters.
+ 
+  grid_name: "Example Grid"
+
+  rras: 
+    - "RRA:AVERAGE:0.5:1:244" 
+    - "RRA:AVERAGE:0.5:24:244" 
+    - "RRA:AVERAGE:0.5:168:244" 
+    - "RRA:AVERAGE:0.5:672:244"      
+    - "RRA:AVERAGE:0.5:5760:374"
+
+  # Data sources definition.
+  # TODO: maybe I can use facts to do it automatically.
+  data_sources:
+    'ds1':
+      polling_interval: 15
+      servers:
+        - 'localhost:8649'
+        - 'localhost:8650'
+    'ds2':
+      servers:
+        - 'localhost:8660'
+
+# Optional parameters. Values below are gmeta's default values.
+
+  debug_level: 0
+  scalable: 'on'
+  authority: 'http://hostname/ganglia'
+  # TODO: maybe I can use facts to do it automatically.
+  trusted_hosts:
+    - '127.0.0.1'
+    - 'localhost'
+  all_trusted: 'off'
+  setuid: 'on'
+  setuid_username: "nobody"
+  umask: 0
+  xml_port: 8651
+  interactive_port: 8652
+  server_threads: 4
+  rrd_rootdir: '/var/lib/ganglia/rrds'
+  unsummarized_metrics:
+    - 'diskstat'
+    - 'CPU'    
+  case_sensitive_hostnames: 0
+
+# Graphite support parameters.
+  
+  carbon_server: 'my.graphite.box'
+  carbon_port: 2003
+  carbon_protocol: 'tcp'
+  graphite_prefix: 'datacenter1.gmetad'
+  graphite_path: '"datacenter1.gmetad.%s.%h.%m'
+  carbon_timeout: 500
+  
+# Memcached support parameters.
+
+  memcached_parameters: "--SERVER=127.0.0.1"
+
+
+# Ganglia Monitors
+  
+  
+ganglia_config_gmond:
+  
+# Mandatory parameters.
+# The key is the cluster name.
+    'ds1':
+      globals:
+        daemonize: 'yes'
+        setuid: 'yes'
+        user: 'nobody'    
+        debug_level: 0
+        max_udp_msg_len: 1472
+        mute: 'no'
+        deaf: 'no' 
+        allow_extra_data: 'yes'
+        host_dmax: 0
+        host_tmax: 20
+        cleanup_threshold: 300
+        gexec: 'no'
+        send_metadata_interval: 0
+
+      cluster:
+        owner: 'unspecified'
+        latlong: 'unspecified'
+        url: 'unspecified'
+        
+      host:
+        location: 'unspecified'
+
+      udp_send_channel:
+        bind_hostname: 'yes'
+        mcast_join: '239.2.11.71'
+        port: 8649
+        ttl: 1
+
+      udp_recv_channel:
+        mcast_join: '239.2.11.71'
+        port: 8649
+        bind: '239.2.11.71'
+# New options not yet supported in CentOS 6.5 and Ubuntu 13.04        
+#        retry_bind: 'true'
+#        buffer: 212990
+        
+      tcp_accept_channel:
+        port: 8649
+# New options not yet supported in CentOS 6.5 and Ubuntu 13.04                
+#        gzip_output: 'no'
+
+# New options not yet supported in CentOS 6.5 and Ubuntu 13.04                
+#      sflow:
+#        udp_port: 6343
+#        accept_vm_metrics: 'yes'
+#        accept_jvm_metrics: 'yes'
+#        multiple_jvm_instances: 'no'
+#        accept_http_metrics: 'yes'
+#        multiple_http_instances: 'no'
+#        accept_memcache_metrics: 'yes'
+#        multiple_memcache_instances: 'no'
+
+        
+      modules:
+        - name: 'core_metrics'
+        
+        - name: 'cpu_module'
+          path: '{{ ganglia_lib_dir }}/modcpu.so'
+
+        - name: 'disk_module'
+          path: '{{ ganglia_lib_dir }}/moddisk.so'
+
+        - name: 'load_module'
+          path: '{{ ganglia_lib_dir }}/modload.so'
+
+        - name: 'mem_module'
+          path: '{{ ganglia_lib_dir }}/modmem.so'
+
+        - name: 'net_module'
+          path: '{{ ganglia_lib_dir }}/modnet.so'
+          
+        - name: 'proc_module'
+          path: '{{ ganglia_lib_dir }}/modproc.so'
+
+        - name: 'sys_module'
+          path: '{{ ganglia_lib_dir }}/modsys.so'
+
+      collection_groups:
+        - collect_once: 'yes'
+          time_threshold: 20
+          metrics:
+            - name: 'heartbeat'
+
+        - collect_once: 'yes'
+          time_threshold: 180
+          metrics:
+            - name: 'mem_total'
+              title: 'Memory Total'
+
+        - collect_once: 'yes'
+          time_threshold: 1200
+          metrics:
+            - name: 'cpu_num'
+              title: 'CPU Count'
+
+            - name: 'cpu_speed'
+              title: 'CPU Speed'
+
+            - name: 'swap_total'
+              title: 'Swap Space Total'
+
+            - name: 'boottime'
+              title: 'Last Boot Time'
+
+            - name: 'machine_type'
+              title: 'Machine Type'
+
+            - name: 'os_name'
+              title: 'Operating System'
+
+            - name: 'os_release'
+              title: 'Operating System Release'
+
+            - name: 'location'
+              title: 'Location'
+
+        - collect_once: 'yes'
+          time_threshold: 300
+          metrics:
+            - name: 'gexec'
+              title: 'Gexec Status'
+
+        - collect_every: 20
+          time_threshold: 90
+          metrics:
+            - name: 'cpu_user'
+              value_threshold: '1.0'
+              title: 'CPU User'
+              
+            - name: 'cpu_system'
+              value_threshold: '1.0'
+              title: 'CPU System'
+
+            - name: 'cpu_idle'
+              value_threshold: '5.0'
+              title: 'CPU Idle'
+
+            - name: 'cpu_nice'
+              value_threshold: '1.0'
+              title: 'CPU Nice'
+
+            - name: 'cpu_aidle'
+              value_threshold: '5.0'
+              title: 'CPU aidle'
+
+            - name: 'cpu_wio'
+              value_threshold: '1.0'
+              title: 'CPU wio'
+
+            - name: 'cpu_intr'
+              value_threshold: '1.0'
+              title: 'CPU intr'
+
+            - name: 'cpu_sintr'
+              value_threshold: '1.0'
+              title: 'CPU sintr'
+
+        - collect_every: 20
+          time_threshold: 90
+          metrics:
+            - name: 'load_one'
+              time_threshold: '1.0'
+              title: 'One Minute Load Average'
+
+            - name: 'load_five'
+              time_threshold: '1.0'
+              title: 'Five Minute Load Average'
+
+            - name: 'load_fifteen'
+              time_threshold: '1.0'
+              title: 'Fifteen Minute Load Average'
+                  
+        - collect_every: 80
+          time_threshold: 950
+          metrics:
+            - name: 'proc_run'
+              value_threshold: '1.0'
+              title: 'Total Running Processes'
+
+            - name: 'proc_total'
+              value_threshold: '1.0'
+              title: 'Total Processes'
+
+        - collect_every: 40
+          time_threshold: 180
+          metrics:
+            - name: 'mem_free'
+              value_threshold: '1024.0'
+              title: 'Free Memory'
+
+            - name: 'mem_shared'
+              value_threshold: '1024.0'
+              title: 'Shared Memory'
+                
+            - name: 'mem_buffers'
+              value_threshold: '1024.0'
+              title: 'Memory Buffers'
+
+            - name: 'mem_cached'
+              value_threshold: '1024.0'
+              title: 'Cached Memory'
+
+            - name: 'swap_free'
+              value_threshold: '1024.0'
+              title: 'Free Swap Space'
+
+        - collect_every: 40
+          time_threshold: 300
+          metrics:
+            - name: 'bytes_out'
+              value_threshold: 4096
+              title: 'Bytes Sent'
+              
+            - name: 'bytes_in'
+              value_threshold: 4096
+              title: 'Bytes Received'
+
+            - name: 'pkts_in'
+              value_threshold: 256
+              title: 'Packets Received'
+
+            - name: 'pkts_out'
+              value_threshold: 256
+              title: 'Packets Sent'
+
+        - collect_every: 40
+          time_threshold: 180
+          metrics:
+            - name: 'disk_free'
+              value_threshold: '1.0'
+              title: 'Disk Space Available'
+
+            - name: 'part_max_used'
+              value_threshold: '1.0'
+              title: 'Maximum Disk Space Used'
+
+            - name: 'disk_total'
+              value_threshold: '1.0'
+              title: 'Total Disk Space'                  
+               
+    # 'ds2':
+    #   cluster:
+    #     owner: 'unspecified'
+    #     latlong: 'unspecified'
+    #     url: 'unspecified'
+    #   ...

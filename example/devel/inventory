@@ -1,0 +1,5 @@
+[deb]
+192.168.10.10 ansible_ssh_user=vagrant ansible_ssh_private_key_file=~/.vagrant.d/insecure_private_key is_ganglia_meta=1 is_ganglia_web=1
+
+[rh]
+192.168.10.11 ansible_ssh_user=vagrant ansible_ssh_private_key_file=~/.vagrant.d/insecure_private_key is_ganglia_meta=1 is_ganglia_web=1

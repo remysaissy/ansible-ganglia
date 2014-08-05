@@ -1,0 +1,222 @@
+/* This configuration is as close to 2.5.x default behavior as possible
+   The values closely match ./gmond/metric.h definitions in 2.5.x */
+{% if item.value.globals is defined %}
+globals {
+{% if item.value.globals.daemonize is defined %}
+  daemonize = {{ item.value.globals.daemonize }}
+{% endif %}
+{% if item.value.globals.setuid is defined %}
+  setuid = {{ item.value.globals.setuid }}
+{% endif %}
+{% if item.value.globals.user is defined %}
+  user = {{ item.value.globals.user }}
+{% endif %}
+{% if item.value.globals.debug_level is defined %}
+  debug_level = {{ item.value.globals.debug_level }}
+{% endif %}
+{% if item.value.globals.max_udp_msg_len is defined %}
+  max_udp_msg_len = {{ item.value.globals.max_udp_msg_len }}
+{% endif %}
+{% if item.value.globals.mute is defined %}
+  mute = {{ item.value.globals.mute }}
+{% endif %}
+{% if item.value.globals.deaf is defined %}
+  deaf = {{ item.value.globals.deaf }}
+{% endif %}
+{% if item.value.globals.allow_extra_data is defined %}
+  allow_extra_data = {{ item.value.globals.allow_extra_data }}
+{% endif %}
+{% if item.value.globals.host_dmax is defined %}
+  host_dmax = {{ item.value.globals.host_dmax }} /*secs. Expires (removes from web interface) hosts in 1 day */
+{% endif %}
+{% if item.value.globals.host_tmax is defined %}
+  host_dmax = {{ item.value.globals.host_tmax }} /*secs */
+{% endif %}
+{% if item.value.globals.cleanup_threshold is defined %}
+  cleanup_threshold = {{ item.value.globals.cleanup_threshold }} /*secs */
+{% endif %}
+{% if item.value.globals.gexec is defined %}
+  gexec = {{ item.value.globals.gexec }}
+{% endif %}
+{% if item.value.globals.send_metadata_interval is defined %}
+  # By default gmond will use reverse DNS resolution when displaying your hostname
+  # Uncommeting following value will override that value.
+  # override_hostname = "mywebserver.domain.com"
+  # If you are not using multicast this value should be set to something other than 0.
+  # Otherwise if you restart aggregator gmond you will get empty graphs. 60 seconds is reasonable
+  send_metadata_interval = {{ item.value.globals.send_metadata_interval }} /*secs */
+{% endif %}  
+}
+{% endif %}
+{% if item.value.cluster is defined %}
+/*
+ * The cluster attributes specified will be used as part of the <CLUSTER>
+ * tag that will wrap all hosts collected by this instance.
+ */
+cluster {
+  name = "{{ item.key }}"
+{% if item.value.cluster.owner is defined %}
+  owner = "{{ item.value.cluster.owner }}"
+{% endif %}
+{% if item.value.cluster.latlong is defined %}
+  latlong = "{{ item.value.cluster.latlong }}"
+{% endif %}
+{% if item.value.cluster.url is defined %}
+  url = "{{ item.value.cluster.url }}"
+{% endif %}
+}
+{% endif %}
+
+{% if item.value.host is defined %}
+/* The host section describes attributes of the host, like the location */
+host {
+{% if item.value.host.location is defined %}
+  location = "{{ item.value.host.location }}"
+{% endif %}
+}
+{% endif %}
+
+{% if item.value.udp_send_channel is defined %}
+/* Feel free to specify as many udp_send_channels as you like.  Gmond
+   used to only support having a single channel */
+udp_send_channel {
+{% if item.value.udp_send_channel.bind_hostname is defined %}
+  # Highly recommended, soon to be default.
+  # This option tells gmond to use a source address
+  # that resolves to the machine's hostname.  Without
+  # this, the metrics may appear to come from any
+  # interface and the DNS names associated with
+  # those IPs will be used to create the RRDs.
+  bind_hostname = {{ item.value.udp_send_channel.bind_hostname }}
+{% endif %}
+{% if item.value.udp_send_channel.mcast_join is defined %}
+  mcast_join = {{ item.value.udp_send_channel.mcast_join }}
+{% endif %}
+{% if item.value.udp_send_channel.port is defined %}
+  port = {{ item.value.udp_send_channel.port }}
+{% endif %}
+{% if item.value.udp_send_channel.ttl is defined %}
+  ttl = {{ item.value.udp_send_channel.ttl }}
+{% endif %}
+}
+{% endif %}
+
+{% if item.value.udp_recv_channel is defined %}
+/* You can specify as many udp_recv_channels as you like as well. */
+udp_recv_channel {
+
+{% if item.value.udp_recv_channel.mcast_join is defined %}
+  mcast_join = {{ item.value.udp_recv_channel.mcast_join }}
+{% endif %}
+{% if item.value.udp_recv_channel.port is defined %}
+  port = {{ item.value.udp_recv_channel.port }}
+{% endif %}
+{% if item.value.udp_recv_channel.bind is defined %}
+  bind = {{ item.value.udp_recv_channel.bind }}
+{% endif %}
+{% if item.value.udp_recv_channel.retry_bind is defined %}
+  retry_bind = {{ item.value.udp_recv_channel.retry_bind }}
+{% endif %}
+{% if item.value.udp_recv_channel.buffer is defined %}
+  # Size of the UDP buffer. If you are handling lots of metrics you really
+  # should bump it up to e.g. 10MB or even higher.
+  buffer = {{ item.value.udp_recv_channel.buffer }}
+{% endif %}
+}
+{% endif %}
+
+{% if item.value.tcp_accept_channel is defined %}
+/* You can specify as many tcp_accept_channels as you like to share
+   an xml description of the state of the cluster */
+tcp_accept_channel {
+{% if item.value.tcp_accept_channel.port is defined %}
+  port = {{ item.value.tcp_accept_channel.port }}
+{% endif %}
+{% if item.value.tcp_accept_channel.gzip_output is defined %}
+  # If you want to gzip XML output
+  gzip_output = {{ item.value.tcp_accept_channel.gzip_output }}
+{% endif %}
+}
+{% endif %}
+
+{% if item.value.sflow is defined %}
+/* Optional sFlow settings */
+sflow {
+{% if item.value.sflow.udp_port is defined %}
+  udp_port = {{ item.value.sflow.udp_port }}
+{% endif %}
+{% if item.value.sflow.accept_vm_metrics is defined %}
+  accept_vm_metrics = {{ item.value.sflow.accept_vm_metrics }}
+{% endif %}
+{% if item.value.sflow.accept_jvm_metrics is defined %}
+  accept_jvm_metrics = {{ item.value.sflow.accept_jvm_metrics }}
+{% endif %}
+{% if item.value.sflow.accept_http_metrics is defined %}
+  accept_http_metrics = {{ item.value.sflow.accept_http_metrics }}
+{% endif %}
+{% if item.value.sflow.multiple_http_instances is defined %}
+  multiple_http_instances = {{ item.value.sflow.multiple_http_instances }}
+{% endif %}
+{% if item.value.sflow.accept_memcache_metrics is defined %}
+  accept_memcache_metrics = {{ item.value.sflow.accept_memcache_metrics }}
+{% endif %}
+{% if item.value.sflow.multiple_memcache_instances is defined %}
+  multiple_memcache_instances = {{ item.value.sflow.multiple_memcache_instances }}
+{% endif %}
+}
+{% endif %}
+
+{% if item.value.modules is defined %}
+/* Each metrics module that is referenced by gmond must be specified and
+   loaded. If the module has been statically linked with gmond, it does
+   not require a load path. However all dynamically loadable modules must
+   include a load path. */
+modules {
+{% for module in item.value.modules %}
+   module {
+{% if module.name is defined %}
+     name = "{{ module.name }}"
+{% endif %}
+{% if module.path is defined %}
+     path = "{{ module.path }}"
+{% endif %}
+   }
+{% endfor %}
+}
+{% endif %}
+
+{% if item.value.collection_groups is defined %}
+/* The old internal 2.5.x metric array has been replaced by the following
+   collection_group directives.  What follows is the default behavior for
+   collecting and sending metrics that is as close to 2.5.x behavior as
+   possible. */
+
+{% for cg in item.value.collection_groups %}
+   collection_group {
+{% if cg.collect_once is defined %}
+     collect_once = {{ cg.collect_once }}
+{% endif %}
+{% if cg.collect_every is defined %}
+     collect_every = {{ cg.collect_every }} /* secs */
+{% endif %}
+{% if cg.time_threshold is defined %}
+     time_threshold = {{ cg.time_threshold }}
+{% endif %}
+{% if cg.metrics is defined %}
+{% for metric in cg.metrics %}
+   metric {
+{% if metric.name is defined %}
+     name = "{{ metric.name }}"
+{% endif %}
+{% if metric.value_threshold is defined %}
+     value_threshold = "{{ metric.value_threshold }}"
+{% endif %}
+{% if metric.title is defined %}
+     title = "{{ metric.title }}"
+{% endif %}
+   }
+{% endfor %}
+{% endif %}
+   }
+{% endfor %}
+{% endif %}

@@ -1,0 +1,21 @@
+---
+
+- name: test ganglia role
+  hosts: all
+  sudo: yes
+  vars_files:
+    - 'defaults/main.yml'
+    - 'vars/main.yml'
+    - 'vars/Debian.yml'
+    - 'vars/RedHat.yml'        
+    
+  tasks:
+    - include: 'tasks/main.yml'
+    - include: 'tasks/configure.yml'
+    - include: 'tasks/packages.yml'
+    - include: 'tasks/repositories.yml'            
+
+  handlers:
+    - include: 'handlers/Debian.yml'
+    - include: 'handlers/RedHat.yml'
+      

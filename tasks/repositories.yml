@@ -1,0 +1,10 @@
+---
+
+- name: Add the EPEL {{ ansible_distribution_version|int }} repository
+  template: >-
+    src=epel.repo.j2
+    dest={{ yum_repos_dir }}/epel.repo
+    owner=root
+    group=root
+    mode=0644
+  when: "ansible_os_family == 'RedHat'"

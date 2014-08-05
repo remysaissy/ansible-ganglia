@@ -1,0 +1,9 @@
+
+# Path to the ganglia configuration.
+ganglia_config_dir: /etc/ganglia
+
+# Path to init scripts.
+ganglia_init_d_dir: /etc/init.d
+
+# Location of the gmond binary.
+ganglia_gmond_binary: /usr/sbin/gmond

@@ -1,0 +1,12 @@
+
+# Location of yum repositories. Used to install the EPEL repository.
+yum_repos_dir: /etc/yum.repos.d
+
+# Location of the httpd configurations. Used to install the web frontend configuration.
+httpd_conf_d_dir: /etc/httpd/conf.d
+
+# Location of the web frontend on the system.
+ganglia_web_path: /usr/share/ganglia
+
+# Directory where modules are located.
+ganglia_lib_dir: /usr/lib64/ganglia

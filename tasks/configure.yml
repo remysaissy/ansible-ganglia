@@ -1,0 +1,70 @@
+---
+
+# Configures the gmetad service.
+
+- name: Configure the gmetad
+  template: >-
+    src=gmetad.conf.j2
+    dest={{ ganglia_config_dir }}/gmetad.conf
+    owner=root
+    group=root
+    mode=0644    
+  when: "is_ganglia_meta is defined"
+
+# Configure the gmond service
+
+- name: Disable the default Ganglia Monitor
+  service: >-
+    name=gmond
+    enabled=no
+    state=stopped
+  when: "ansible_os_family == 'RedHat'"
+
+- name: Disable the default Ganglia Monitor
+  service: >-
+    name=ganglia-monitor
+    enabled=no
+    state=stopped
+  when: "ansible_os_family == 'Debian'"
+
+- name: Configure Ganglia Monitors
+  template: >-
+    src=gmond.conf.j2
+    dest={{ ganglia_config_dir }}/gmond-{{ item.key }}.conf
+    owner=root
+    group=root
+    mode=0644
+  with_dict: ganglia_config_gmond
+  tags:
+    - gmond
+
+- name: Install init scripts for Ganglia Monitors
+  template: >-
+    src=gmond-{{ ansible_os_family }}.service.j2
+    dest={{ ganglia_init_d_dir }}/gmond-{{ item.key }}
+    owner=root
+    group=root
+    mode=0755
+  with_dict: ganglia_config_gmond
+  tags:
+    - gmond    
+
+- name: Ensure Ganglia Monitor services are enabled and started
+  service: >-
+    name=gmond-{{ item.key }}
+    enabled=yes
+    state=restarted
+  with_dict: ganglia_config_gmond
+  tags:
+    - gmond
+    
+# Configures the web frontend service in apache
+
+- name: Enable the httpd frontend
+  template: >-
+    src=webfrontend-apache.conf.j2
+    dest={{ httpd_conf_d_dir }}
+    owner=root
+    group=root
+    mode=0644
+  when: "is_ganglia_web is defined"
