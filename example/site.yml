@@ -1,6 +1,0 @@
----
-- name: Install ganglia
-  hosts: all
-  sudo: yes
-  roles:
-    - ganglia
