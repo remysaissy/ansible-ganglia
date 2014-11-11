@@ -2,6 +2,22 @@
 
 # Configures the gmetad service.
 
+- name: Ensure the gmetad user exists
+  user: >-
+    name="{{ ganglia_config_gmetad.setuid_username }}"
+    system=yes    
+    state=present 
+  when: "is_ganglia_meta is defined"
+
+- name: Ensure the gmetad directory exists
+  file: >-
+    path="{{ ganglia_config_gmetad.rrd_rootdir }}"
+    owner="{{ ganglia_config_gmetad.setuid_username }}"
+    group=root
+    mode=0755
+    state=directory
+  when: "is_ganglia_meta is defined"    
+
 - name: Configure the gmetad
   template: >-
     src=gmetad.conf.j2

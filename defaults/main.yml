@@ -98,14 +98,15 @@ ganglia_config_gmond:
 
       udp_send_channel:
         bind_hostname: 'yes'
-        mcast_join: '239.2.11.71'
+#	host: 'monitoring-host'
+#        mcast_join: '239.2.11.71'
         port: 8649
         ttl: 1
 
       udp_recv_channel:
-        mcast_join: '239.2.11.71'
+#        mcast_join: '239.2.11.71'
         port: 8649
-        bind: '239.2.11.71'
+#        bind: '239.2.11.71'
 # New options not yet supported in CentOS 6.5 and Ubuntu 13.04        
 #        retry_bind: 'true'
 #        buffer: 212990

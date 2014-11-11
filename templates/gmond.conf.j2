@@ -92,6 +92,9 @@ udp_send_channel {
 {% if item.value.udp_send_channel.mcast_join is defined %}
   mcast_join = {{ item.value.udp_send_channel.mcast_join }}
 {% endif %}
+{% if item.value.udp_send_channel.host is defined %}
+  host = {{ item.value.udp_send_channel.host }}
+{% endif %}
 {% if item.value.udp_send_channel.port is defined %}
   port = {{ item.value.udp_send_channel.port }}
 {% endif %}
