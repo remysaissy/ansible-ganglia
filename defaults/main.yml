@@ -29,7 +29,8 @@ ganglia_config_gmetad:
       servers:
         - 'localhost:8660'
 
-# Optional parameters. Values below are gmeta's default values.
+# Optional parameters if hash_behaviour=merge. Otherwise these values must be copied.
+# Values below are gmeta's default values.
 
   debug_level: 0
   scalable: 'on'

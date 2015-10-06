@@ -10,6 +10,14 @@ Configuration
 
 There are a few things to configure before using this role.
 
+### ansible.cfg ###
+
+In order to use the role without having to copy all of the maps and their default values, the hash_behaviour of the ansibl.cfg file's defaults section should be set to merge.
+```
+[defaults]
+hash_behaviour = merge
+```
+
 ### Specify which nodes are "Ganglia Collector Daemon" ###
 
 For the "Ganglia Collector Daemon node", add to the inventory file
