@@ -10,3 +10,6 @@ ganglia_web_path: /usr/share/ganglia
 
 # Directory where modules are located.
 ganglia_lib_dir: /usr/lib64/ganglia
+
+# RH version of the Amazon Linux AMI.
+aws_ami_rh_version: 6

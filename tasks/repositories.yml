@@ -1,5 +1,12 @@
 ---
 
+
+- name: AWS AMI detected, forcing ansible_distribution_version to {{ aws_ami_rh_version }}
+  set_fact: >-
+    ansible_distribution_version={{ aws_ami_rh_version }}
+  when: "ansible_os_family == 'RedHat' and ansible_distribution == 'Amazon'"
+         
+
 - name: Add the EPEL {{ ansible_distribution_version|int }} repository
   template: >-
     src=epel.repo.j2
