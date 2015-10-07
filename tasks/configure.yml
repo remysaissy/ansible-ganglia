@@ -6,7 +6,9 @@
   user: >-
     name="{{ ganglia_config_gmetad.setuid_username }}"
     system=yes    
-    state=present 
+    state=present
+  notify:
+    - restart gmetad
   when: "is_ganglia_meta is defined"
 
 - name: Ensure the gmetad directory exists
@@ -16,6 +18,8 @@
     group=root
     mode=0755
     state=directory
+  notify:
+    - restart gmetad
   when: "is_ganglia_meta is defined"    
 
 - name: Configure the gmetad
@@ -24,7 +28,9 @@
     dest={{ ganglia_config_dir }}/gmetad.conf
     owner=root
     group=root
-    mode=0644    
+    mode=0644
+  notify:
+    - restart gmetad
   when: "is_ganglia_meta is defined"
 
 # Configure the gmond service
