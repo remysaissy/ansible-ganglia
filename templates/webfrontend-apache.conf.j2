@@ -5,4 +5,8 @@ Alias {{ ganglia_web_location }} {{ ganglia_web_path }}
 	   Order allow,deny
 	   Allow from all
 	   Deny from none
+	   # Use Require instead of Order, Allow and Deny if
+	   # running on Apache 2.4 or using authz_core
+	   # Otherwise, a permission denied by client error might occur
+	   # Require all granted
 </Location>
