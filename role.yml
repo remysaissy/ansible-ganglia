@@ -16,6 +16,5 @@
     - include: 'tasks/repositories.yml'            
 
   handlers:
-    - include: 'handlers/Debian.yml'
-    - include: 'handlers/RedHat.yml'
+    - include: 'handlers/main.yml'
       
