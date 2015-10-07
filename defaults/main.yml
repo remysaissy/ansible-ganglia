@@ -52,18 +52,20 @@ ganglia_config_gmetad:
     - 'CPU'    
   case_sensitive_hostnames: 0
 
-# Graphite support parameters.
+# Graphite support parameters.  
+# Uncomment and configure these if you're using Graphite.
   
-  carbon_server: 'my.graphite.box'
-  carbon_port: 2003
-  carbon_protocol: 'tcp'
-  graphite_prefix: 'datacenter1.gmetad'
-  graphite_path: '"datacenter1.gmetad.%s.%h.%m'
-  carbon_timeout: 500
+#  carbon_server: 'my.graphite.box'
+#  carbon_port: 2003
+#  carbon_protocol: 'tcp'
+#  graphite_prefix: 'datacenter1.gmetad'
+#  graphite_path: '"datacenter1.gmetad.%s.%h.%m'
+#  carbon_timeout: 500
   
 # Memcached support parameters.
+# Uncomment and configure these if you're using Memcached.
 
-  memcached_parameters: "--SERVER=127.0.0.1"
+#  memcached_parameters: "--SERVER=127.0.0.1"
 
 
 # Ganglia Monitors
