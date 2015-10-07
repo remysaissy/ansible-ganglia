@@ -79,7 +79,7 @@
 - name: Enable the httpd frontend
   template: >-
     src=webfrontend-apache.conf.j2
-    dest={{ httpd_conf_d_dir }}
+    dest={{ httpd_conf_d_dir }}/webfrontend-ganglia.conf
     owner=root
     group=root
     mode=0644
