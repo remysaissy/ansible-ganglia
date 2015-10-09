@@ -80,8 +80,6 @@ One gmond configuration file and one systemV service will be created per data so
 - Use ganglia_config_gmetad and ganglia_config_gmond to discover the ports to open for the firewall
 - Add support for installing extensions
 - Add support for installing a version not available in the official Operating System repository
-- Use handlers to restart httpd or apache2 depending on the OS after installing the webfrontend configuration
-- Get rid of a permission denied when accessing the Ganglia UI (/ganglia) after the webfrontend deployment
 
 Usage
 -----
@@ -105,4 +103,4 @@ Licensed under the MIT License. See the LICENSE file for details.
 
 #### Feedback, bug-reports, requests, ...
 
-Are [welcome](https://github.com/ansibles/monit/issues)!
+Are [welcome](https://github.com/remysaissy/ansible-ganglia/issues)!
